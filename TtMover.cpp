@@ -86,11 +86,11 @@ TT_State TtMover::process(void)
         // just the basic solenoid and motor commands
       if (this->thisCommand == CMD_MOTOR_CW)
       {
-        digitalWrite(MOTOR_PIN, LOW);        //motor cw - default
+        digitalWrite(MOTOR_PIN, DIR_CW);        //motor cw - default
       }
       if (this->thisCommand == CMD_MOTOR_ACW)
       {
-        digitalWrite(MOTOR_PIN, HIGH);      //motor acw
+        digitalWrite(MOTOR_PIN, DIR_ACW);      //motor acw
       }
       if (this->thisCommand == CMD_SOLENOID_ON)
       {
@@ -104,7 +104,7 @@ TT_State TtMover::process(void)
   // step commands
       if (this->thisCommand == CMD_STEP_CW)          // step cw
       {
-        digitalWrite(MOTOR_PIN,LOW);
+        digitalWrite(MOTOR_PIN, DIR_CW);
         digitalWrite(SOLENOID_PIN, HIGH);
         delay(2000);
         digitalWrite(SOLENOID_PIN, LOW);
@@ -114,7 +114,7 @@ TT_State TtMover::process(void)
 
       if (this->thisCommand == CMD_STEP_ACW)         // step acw
       {
-        digitalWrite(MOTOR_PIN, HIGH); //motor acw
+        digitalWrite(MOTOR_PIN, DIR_ACW); //motor acw
         digitalWrite(SOLENOID_PIN, HIGH); //solenoid on
         delay(2000);
         digitalWrite(SOLENOID_PIN, LOW); //solenoid off
@@ -124,9 +124,9 @@ TT_State TtMover::process(void)
 
 
   // rotate commands
-      if (this->thisCommand == CMD_ROTATE_CW)          // step cw
+      if (this->thisCommand == CMD_ROTATE_CW)          // rotate cw
       {
-        digitalWrite(MOTOR_PIN, LOW);
+        digitalWrite(MOTOR_PIN, DIR_CW);
         digitalWrite(SOLENOID_PIN, HIGH);
 
         memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
@@ -134,10 +134,10 @@ TT_State TtMover::process(void)
 
       }
 
-      if (this->thisCommand == CMD_ROTATE_ACW)          // step cw
+      if (this->thisCommand == CMD_ROTATE_ACW)          // rotate acw
       {
 
-        digitalWrite(MOTOR_PIN, HIGH);
+        digitalWrite(MOTOR_PIN, DIR_ACW);
         digitalWrite(SOLENOID_PIN, HIGH);
 
         memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
@@ -170,12 +170,12 @@ TT_State TtMover::process(void)
           if (this->direction == 1)
           {
             this->target = this->thisCommand - 1;
-            digitalWrite(MOTOR_PIN, LOW);    //motor cw
+            digitalWrite(MOTOR_PIN, DIR_CW);    //motor cw
           }
           if (this->direction == 2)
           {
             this->target = this->thisCommand - 2;
-            digitalWrite(MOTOR_PIN, HIGH);   //motor acw
+            digitalWrite(MOTOR_PIN, DIR_ACW);   //motor acw
           }
 
 #ifdef DEBUG_MSG
@@ -243,8 +243,8 @@ TT_State TtMover::process(void)
     // 180 turn
        if ((CMD_180_CW <= this->thisCommand) && (this->thisCommand <= CMD_180_ACW))
        {
-         if (this->thisCommand == CMD_180_CW) digitalWrite(MOTOR_PIN, LOW);    //motor cw
-         if (this->thisCommand == CMD_180_ACW) digitalWrite(MOTOR_PIN, HIGH);  //motor acw
+         if (this->thisCommand == CMD_180_CW) digitalWrite(MOTOR_PIN, DIR_CW);    //motor cw
+         if (this->thisCommand == CMD_180_ACW) digitalWrite(MOTOR_PIN, DIR_ACW);  //motor acw
       // work out target
          switch (this->track)
          {

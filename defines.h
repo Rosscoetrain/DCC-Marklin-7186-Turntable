@@ -26,7 +26,11 @@
 // decoder CV wait time between checksensors in ms
 #define CV_ACCESSORY_DECODER_WAIT_TIME 2
 
+// define clockwise value
+#define DIR_CW 1
 
+// define anti clockwise
+#define DIR_ACW !DIR_CW
 
 // Set the number of tracks
 #define NUM_TRACKS 16
