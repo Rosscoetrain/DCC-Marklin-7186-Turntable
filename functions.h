@@ -2,6 +2,87 @@
  * functions.h
  */
 
+
+/*
+ * add the command to the command queue depending on address received.
+ */
+
+void setCommand(uint16_t Addr, uint8_t Direction, uint8_t OutputPower)
+{
+
+  if (learningMode == HIGH) {
+
+//    int H = (Addr - 1) / 64;
+//    int L = Addr - (H * 64);
+    byte L = (Addr + 3) / 4;
+    byte H = (Addr + 3) / 1024;
+
+#ifdef DEBUG_MSG
+    Serial.println("setCommand");
+    Serial.print(F("Value = ")); Serial.println(Addr,DEC);
+    Serial.print(F("Dir = ")); Serial.println(Direction,DEC);
+    Serial.print(F("Op = ")); Serial.println(OutputPower,DEC);
+    
+//    Serial.print(F(" H = ")); Serial.println(H,DEC);
+//    Serial.print(F(" L = ")); Serial.println(L,DEC);
+#endif
+                  
+    Dcc.setCV(CV_ACCESSORY_DECODER_ADDRESS_MSB, H);
+    Dcc.setCV(CV_ACCESSORY_DECODER_ADDRESS_LSB, L);
+
+   }
+  else {
+
+    if(( Addr >= BaseTurnoutAddress ) && ( Addr < (BaseTurnoutAddress + NUM_COMMANDS )) && OutputPower )
+     {
+
+//      uint16_t pinIndex = ( (Addr - BaseTurnoutAddress) << 1 ) + Direction ;
+//      pinPulser.addPin(outputs[pinIndex]);
+      thisCommand = ( ( ( Addr - BaseTurnoutAddress) * 10 ) + 1 ) + Direction;
+
+      ttMover.addCommand(thisCommand);
+
+#ifdef  DEBUG_MSG_1
+      Serial.println("");
+      Serial.print("ndato thisCommand: ");
+      Serial.println(thisCommand,DEC);
+#endif
+     }
+
+   }
+
+#ifdef  NOTIFY_TURNOUT_MSG
+  Serial.println();
+#endif
+
+}
+
+
+
+
+/*
+ * setup the version number
+ */
+
+
+void setVersion() {
+  const String versionString = VERSION;
+  char versionArray[versionString.length() + 1];
+  versionString.toCharArray(versionArray, versionString.length() + 1);
+  version = strtok(versionArray, "."); // Split version on .
+  versionBuffer[0] = atoi(version);  // Major first
+  version = strtok(NULL, ".");
+  versionBuffer[1] = atoi(version);  // Minor next
+  version = strtok(NULL, ".");
+  versionBuffer[2] = atoi(version);  // Patch last
+}
+
+
+/*
+ * read the analogue pin as if it was a digital pin and return 1 or 0
+ */
+
+
 bool dr (int pin)
  {
   int val = analogRead(pin);
@@ -23,18 +104,14 @@ void showAcknowledge(int nb) {
 }
 
 
-/*
- * 
- */
-
-
-
 
 /*
  * soft reset function
  */
 
 void(* resetFunc) (void) = 0;//declare reset function at address 0
+
+
 
 /*
  * initialize the sensors
@@ -56,6 +133,8 @@ void initSensors()
 
  }
 
+
+
 /*
  * process serial commands
  */
@@ -64,7 +143,7 @@ void initSensors()
 
 void doSerialCommand(String readString)
  {
-  byte p = 0;
+//  byte p = 0;
 
   readString.trim();
 
@@ -153,7 +232,7 @@ void doSerialCommand(String readString)
      {
       if (readString.startsWith("<"))
        {
-        int pos = 0;
+//        int pos = 0;
         // this is where commands are completed
 
         // command to close turnout <C address>
@@ -399,6 +478,97 @@ void doSerialCommand(String readString)
  }
 
 
+
+/*
+ * these are the NMRA dcc override functions
+ */
+
+void notifyCVResetFactoryDefault()
+{
+  // Make FactoryDefaultCVIndex non-zero and equal to num CV's to be reset 
+  // to flag to the loop() function that a reset to Factory Defaults needs to be done
+  FactoryDefaultCVIndex = sizeof(FactoryDefaultCVs)/sizeof(CVPair);
+};
+
+
+
+#ifdef ENABLE_DCC_ACK
+//const int DccAckPin = 3 ;
+
+// This function is called by the NmraDcc library when a DCC ACK needs to be sent
+// Calling this function should cause an increased 60ma current drain on the power supply for 6ms to ACK a CV Read 
+void notifyCVAck(void)
+{
+  Serial.println("notifyCVAck") ;
+  
+  digitalWrite( ENABLE_DCC_ACK, HIGH );
+  delay( 10 );  
+  digitalWrite( ENABLE_DCC_ACK, LOW );
+}
+#endif
+
+
+#ifdef NOTIFY_DCC_MSG
+void notifyDccMsg( DCC_MSG * Msg)
+{
+  Serial.print("notifyDccMsg: ") ;
+  for(uint8_t i = 0; i < Msg->Size; i++)
+  {
+    Serial.print(Msg->Data[i], HEX);
+    Serial.write(' ');
+  }
+  Serial.println();
+}
+#endif
+
+
+
+/*
+// This function is called whenever a normal DCC Turnout Packet is received and we're in Board Addressing Mode
+void notifyDccAccTurnoutBoard( uint16_t BoardAddr, uint8_t OutputPair, uint8_t Direction, uint8_t OutputPower )
+{
+  Serial.print("notifyDccAccTurnoutBoard: ") ;
+  Serial.print(BoardAddr,DEC) ;
+  Serial.print(',');
+  Serial.print(OutputPair,DEC) ;
+  Serial.print(',');
+  Serial.print(Direction,DEC) ;
+  Serial.print(',');
+  Serial.println(OutputPower, HEX) ;
+}
+*/
+
+
+
+// This function is called whenever a DCC Signal Aspect Packet is received
+void notifyDccSigOutputState( uint16_t Addr, uint8_t State)
+{
+  Serial.print("notifyDccSigOutputState: ") ;
+  Serial.print(Addr,DEC) ;
+  Serial.print(',');
+  Serial.println(State, HEX) ;
+
+  setCommand(Addr + State - 1, 1, 1);
+}
+
+
+
+// This function is called whenever a normal DCC Turnout Packet is received and we're in Output Addressing Mode
+void notifyDccAccTurnoutOutput( uint16_t Addr, uint8_t Direction, uint8_t OutputPower )
+{
+#ifdef  NOTIFY_TURNOUT_MSG
+  Serial.print("notifyDccAccTurnoutOutput: Turnout: ") ;
+  Serial.print(Addr,DEC) ;
+  Serial.print(" Direction: ");
+  Serial.print(Direction ? "Closed" : "Thrown") ;
+  Serial.print(" Output: ");
+  Serial.print(OutputPower ? "On" : "Off") ;
+#endif
+
+  setCommand(Addr, Direction, OutputPower);
+
+// check to see if in learning mode and update address
+}
 
 
   

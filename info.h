@@ -13,18 +13,18 @@ For arduino nano
 
 D2    DCC Input
 
-D3    Solenoid on
-D4    Motor direction 0 = cw 1 = acw
+D12    Solenoid on
+D13    Motor direction 0 = cw 1 = acw
 
-D5    Hall 1
-D6    Hall 2
-D7    Hall 3
-D8    Hall 4
-D9    Hall 5
-D10   Hall 6
-D11   Hall 7
-D12   Hall 8
-D13   Hall 9
+D3    Hall 1
+D4    Hall 2
+D5    Hall 3
+D6    Hall 4
+D7    Hall 5
+D8    Hall 6
+D9    Hall 7
+D10   Hall 8
+D11   Hall 9
 
 A0    Hall 10
 A1    Hall 11
@@ -88,24 +88,24 @@ Addresses are from BaseTurnoutAddress ( default = 1 ) to BaseTurnoutAddress + NU
 Address     Function
             Close           Throw
 
-1           motor <         motor >
-2           solenoid off    solenoid on
-3           goto 1 <        goto 1 >
-4           goto 2 <        goto 2 >
-5           goto 3 <        goto 3 >
-6           goto 4 <        goto 4 >
-7           goto 5 <        goto 5 >
-8           goto 6 <        goto 6 >
-9           goto 7 <        goto 7 >
-10          goto 8 <        goto 8 >
-11          goto 9 <        goto 9 >
-12          goto 10 <       goto 10 >
-13          goto 11 <       goto 11 >
-14          goto 12 <       goto 12 >
-15          goto 13 <       goto 13 >
-16          goto 14 <       goto 14 >
-17          goto 15 <       goto 15 >
-18          goto 16 <       goto 16 >
+1           goto 1 <        goto 1 >
+2           goto 2 <        goto 2 >
+3           goto 3 <        goto 3 >
+4           goto 4 <        goto 4 >
+5           goto 5 <        goto 5 >
+6           goto 6 <        goto 6 >
+7           goto 7 <        goto 7 >
+8           goto 8 <        goto 8 >
+9           goto 9 <        goto 9 >
+10          goto 10 <       goto 10 >
+11          goto 11 <       goto 11 >
+12          goto 12 <       goto 12 >
+13          goto 13 <       goto 13 >
+14          goto 14 <       goto 14 >
+15          goto 15 <       goto 15 >
+16          goto 16 <       goto 16 >
+17          motor <         motor >
+18          solenoid off    solenoid on
 19          step <          step >
 20          180deg <        180deg >
 21          rotate <        rotate >

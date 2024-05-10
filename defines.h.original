@@ -4,28 +4,18 @@
 
 
 // to show all debug messages
-//#define DEBUG_MSG
-
-// to show level 1 debug messages
-//#define DEBUG_MSG_1
+#define DEBUG_MSG
 
 // Uncomment to print all DCC Packets
-//#define  NOTIFY_DCC_MSG
-
-// Uncomment to print all DCC turnout messages
-//#define NOTIFY_TURNOUT_MSG
+#define  NOTIFY_DCC_MSG
 
 // Un-Comment the line below to force CVs to be written to the Factory Default values
 // defined in the FactoryDefaultCVs below on Start-Up
-//#define FORCE_RESET_FACTORY_DEFAULT_CV
+#define FORCE_RESET_FACTORY_DEFAULT_CV
 
 // Un-Comment the line below to Enable DCC ACK for Service Mode Programming Read CV Capablilty 
-// For reference only not usable in this decoder as all pins in use for sensors.
 //#define ENABLE_DCC_ACK  15  // This is A1 on the Iowa Scaled Engineering ARD-DCCSHIELD DCC Shield
-//#define DccAckPin ENABLE_DCC_ACK
 
-
-#define LEDCONTROL LED_BUILTIN
 
 // Define the Arduino input Pin number for the DCC Signal 
 #define DCC_PIN     2
@@ -58,7 +48,6 @@
 // spare
 
 #define NUM_COMMANDS NUM_TRACKS + 7
-//#define NUM_COMMANDS NUM_TRACKS
 
 
 #define SOLENOID_PIN 12
@@ -86,19 +75,11 @@
 
 
 // command defines single commands
-/*
+
 #define CMD_MOTOR_CW 1
 #define CMD_MOTOR_ACW 2
 #define CMD_SOLENOID_ON 11
 #define CMD_SOLENOID_OFF 12 
-*/
-
-
-#define CMD_MOTOR_CW 161
-#define CMD_MOTOR_ACW 162
-#define CMD_SOLENOID_ON 171
-#define CMD_SOLENOID_OFF 172 
-
 #define CMD_STEP_CW 181
 #define CMD_STEP_ACW 182
 #define CMD_180_CW 191
@@ -108,41 +89,40 @@
 #define CMD_STOP_AT_NEXT 211
 #define CMD_SPARE 212
 
-
 // command defines track commands
 
-#define CMD_GOTO_1_CW 1
-#define CMD_GOTO_1_ACW 2
-#define CMD_GOTO_2_CW 11
-#define CMD_GOTO_2_ACW 12
-#define CMD_GOTO_3_CW 21
-#define CMD_GOTO_3_ACW 22
-#define CMD_GOTO_4_CW 31
-#define CMD_GOTO_4_ACW 32
-#define CMD_GOTO_5_CW 41
-#define CMD_GOTO_5_ACW 42
-#define CMD_GOTO_6_CW 51
-#define CMD_GOTO_6_ACW 52
-#define CMD_GOTO_7_CW 61
-#define CMD_GOTO_7_ACW 62
-#define CMD_GOTO_8_CW 71
-#define CMD_GOTO_8_ACW 72
-#define CMD_GOTO_9_CW 81
-#define CMD_GOTO_9_ACW 82
-#define CMD_GOTO_10_CW 91
-#define CMD_GOTO_10_ACW 92
-#define CMD_GOTO_11_CW 101
-#define CMD_GOTO_11_ACW 102
-#define CMD_GOTO_12_CW 111
-#define CMD_GOTO_12_ACW 112
-#define CMD_GOTO_13_CW 121
-#define CMD_GOTO_13_ACW 122
-#define CMD_GOTO_14_CW 131
-#define CMD_GOTO_14_ACW 132
-#define CMD_GOTO_15_CW 141
-#define CMD_GOTO_15_ACW 142
-#define CMD_GOTO_16_CW 151
-#define CMD_GOTO_16_ACW 152
+#define CMD_GOTO_1_CW 21
+#define CMD_GOTO_1_ACW 22
+#define CMD_GOTO_2_CW 31
+#define CMD_GOTO_2_ACW 32
+#define CMD_GOTO_3_CW 41
+#define CMD_GOTO_3_ACW 42
+#define CMD_GOTO_4_CW 51
+#define CMD_GOTO_4_ACW 52
+#define CMD_GOTO_5_CW 61
+#define CMD_GOTO_5_ACW 62
+#define CMD_GOTO_6_CW 71
+#define CMD_GOTO_6_ACW 72
+#define CMD_GOTO_7_CW 81
+#define CMD_GOTO_7_ACW 82
+#define CMD_GOTO_8_CW 91
+#define CMD_GOTO_8_ACW 92
+#define CMD_GOTO_9_CW 101
+#define CMD_GOTO_9_ACW 102
+#define CMD_GOTO_10_CW 111
+#define CMD_GOTO_10_ACW 112
+#define CMD_GOTO_11_CW 121
+#define CMD_GOTO_11_ACW 122
+#define CMD_GOTO_12_CW 131
+#define CMD_GOTO_12_ACW 132
+#define CMD_GOTO_13_CW 141
+#define CMD_GOTO_13_ACW 142
+#define CMD_GOTO_14_CW 151
+#define CMD_GOTO_14_ACW 152
+#define CMD_GOTO_15_CW 161
+#define CMD_GOTO_15_ACW 162
+#define CMD_GOTO_16_CW 171
+#define CMD_GOTO_16_ACW 172
 
 
   

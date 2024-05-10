@@ -25,8 +25,10 @@ void TtMover::init(uint16_t interval)
 
 uint8_t TtMover::addCommand(uint8_t command)
 {
-//  Serial.print(" PinPulser::addPin: "); Serial.print(Pin,DEC);
-  
+#ifdef DEBUG_MSG
+  Serial.print(" TtMover::addCommand: "); Serial.println(command,DEC);
+#endif
+
   for(uint8_t i = 0; i < TT_MOVER_MAX_TRACKS; i++)
   {
     if(this->commandQueue[i] == command)
@@ -50,7 +52,7 @@ uint8_t TtMover::addCommand(uint8_t command)
 
 TT_State TtMover::process(void)
 {
-  unsigned long now;
+//  unsigned long now;
   
   switch(this->state)
   {
@@ -63,6 +65,11 @@ TT_State TtMover::process(void)
     if(this->commandQueue[0] != TT_MOVER_SLOT_EMPTY)
     {
       this->thisCommand = this->commandQueue[0];
+
+#ifdef DEBUG_MSG
+      Serial.print("TT_IDLE thiscommand: ");Serial.println(this->thisCommand);
+#endif
+
 
       this->state = TT_MOVE;
     }
@@ -185,57 +192,57 @@ TT_State TtMover::process(void)
       // work out target
           switch (this->target)
             {
-              case 20:
+              case 0:
                 this->target = 1;
                 break;
-              case 30:
+              case 10:
                 this->target = 2;            
                 break;     
-              case 40:
+              case 20:
                 this->target = 3;
                 break;
-              case 50:
+              case 30:
                 this->target = 4;
                 break;
-              case 60:
+              case 40:
                 this->target = 5;
                 break;
-              case 70:
+              case 50:
                 this->target = 6;
                 break;
-              case 80:
+              case 60:
                 this->target = 7;
                 break;
-              case 90:
+              case 70:
                 this->target = 8;
                 break;
-              case 100:
+              case 80:
                 this->target = 9;
                 break;
-              case 110:
+              case 90:
                 this->target = 10;
                 break;
-              case 120:
+              case 100:
                 this->target = 11;
                 break;
-              case 130:
+              case 110:
                 this->target = 12;
                 break;
-              case 140:
+              case 120:
                 this->target = 13;
                 break;
-              case 150:
+              case 130:
                 this->target = 14;
                 break;
-              case 160:
+              case 140:
                 this->target = 15;
                 break;
-              case 170:
+              case 150:
                 this->target = 16;
                 break;
             }
 #ifdef DEBUG_MSG
-          Serial.print(" T: "); Serial.println(target);
+          Serial.print("goto T: "); Serial.println(target);
 #endif
        }
 
@@ -301,10 +308,35 @@ TT_State TtMover::process(void)
 #ifdef DEBUG_MSG
       Serial.print(" T: "); Serial.println(this->target);
 #endif
+
       }
+    this->track = 0;
+    this->CheckSensors();
+
+#ifdef DEBUG_MSG
+    Serial.print(" this->target: "); Serial.println(this->target);
+    Serial.print(" this->track: "); Serial.println(this->track);
+#endif
+
+    if (this->target == this->track)
+     {
+      this->state = TT_STOP;
+     }
+    else
+     {
       this->state = TT_MOVING;
       this->startMs = millis();
+     }
+
+#ifdef DEBUG_MSG
+    Serial.print(" this->state: "); Serial.println(this->state);
+    Serial.print(" this->startMs: "); Serial.println(this->startMs);
+#endif
+    
     break;
+
+
+
 
 /*
  * 
@@ -312,13 +344,52 @@ TT_State TtMover::process(void)
 
     case TT_MOVING:                           // continue moving until the target track is reached
 
-      if ( ( this->thisCommand > CMD_SOLENOID_OFF) && ( this->thisCommand < CMD_ROTATE_CW ))
+
+#ifdef DEBUG_MSG
+//      Serial.println("TT_MOVING: ");
+//      Serial.print("interval: ");Serial.println(this->interval);
+#endif
+
+
+      if ( ( this->thisCommand >= CMD_GOTO_1_CW ) && ( this->thisCommand <= CMD_GOTO_16_CW ) )
+
+       {
+        if ( ( millis() - this->startMs ) > this->interval)
+        {
+          this->CheckSensors();
+
+#ifdef DEBUG_MSG
+      Serial.print(" this->target: "); Serial.println(this->target);
+      Serial.print(" this->track: "); Serial.println(this->track);
+#endif
+          
+          if ( this->target == this->track )
+          {
+            this->state = TT_STOP;
+          }
+          this->startMs = millis();
+        }
+       }
+
+
+/*
+      if ( ( this->thisCommand > CMD_SOLENOID_OFF) && ( this->thisCommand < CMD_ROTATE_CW ) )
       {
         digitalWrite(SOLENOID_PIN, HIGH); //solenoid on
+
+#ifdef DEBUG_MSG
+      Serial.print(" millis: "); Serial.println(millis());
+      Serial.print(" this->startMs: "); Serial.println(this->startMs);
+#endif
 
         if ( ( millis() - this->startMs ) > this->interval)
         {
           this->CheckSensors();
+
+#ifdef DEBUG_MSG
+      Serial.print(" this->track: "); Serial.println(this->track);
+#endif
+          
           if ( this->target == this->track )
           {
             this->state = TT_STOP;
@@ -342,6 +413,7 @@ TT_State TtMover::process(void)
       {
         this->state = TT_STOP;
       }
+*/
 
 
     break;
@@ -351,6 +423,11 @@ TT_State TtMover::process(void)
  */
 
     case TT_STOP:                             // at the target track turn of the solenoid and return to TT_IDLE move next command in queue to begining of queue
+
+#ifdef DEBUG_MSG
+      Serial.println("TT_STOP: ");
+#endif
+      
       if ( (this->thisCommand != CMD_ROTATE_CW) && (this->thisCommand != CMD_ROTATE_ACW) )
       {
        memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
@@ -361,6 +438,9 @@ TT_State TtMover::process(void)
       this->state = TT_IDLE;
     break;
   }
+
+return this->state;
+
 }
 
 
@@ -521,24 +601,43 @@ void TtMover::CheckSensors()
 
   this->lastTrack = this->track;
 
-  for (int j = HALL_1; j < HALL_10; j++)
+  for (int j = HALL_1; j <= HALL_9; j++)
    {
     //crude attempt at suppression LOW = ON
     z = 0;
-    for (int n=1; n<12; n++)
+#ifdef DEBUG_MSG
+    Serial.print("j: ");Serial.println(j);
+#endif
+    for (int n=1; n<10; n++)
      {
       z = z + (digitalRead(j));
+#ifdef DEBUG_MSG
+      Serial.print(" ");Serial.print(z);
+#endif
      }
-
-   if ( z < 4) x = j;
+#ifdef DEBUG_MSG
+   Serial.println("");
+#endif
+   if ( z < 4)
+    {
+      x = j;
+#ifdef DEBUG_MSG
+      Serial.print("z<4 x: ");Serial.println(x);
+#endif
+    }
    }
-  if (x = 0)
+
+#ifdef DEBUG_MSG
+   Serial.print("checkSensor 1 x: ");Serial.println(x);
+#endif
+
+  if (x == 0)
    {
     for (int j = HALL_10; j <= HALL_16; j++)
      {
       //crude attempt at suppression LOW = ON
       z = 0;
-      for (int n=1; n<12; n++)
+      for (int n=1; n<10; n++)
        {
 //        z = z + (digitalRead(j));
         z = z + (dr(j));
@@ -546,8 +645,9 @@ void TtMover::CheckSensors()
       if ( z < 4) x = j;
      }
    }
-
-  
+#ifdef DEBUG_MSG
+   Serial.print("checkSensor 2 x: ");Serial.println(x);
+#endif
   if ( x > 0)
   {
     switch (x)
@@ -603,7 +703,7 @@ void TtMover::CheckSensors()
     }
 
 #ifdef DEBUG_MSG
-  Serial.print("Track = "); Serial.println(track);
+  Serial.print("checkSensors Track = "); Serial.println(track);
 #endif 
 
   }
