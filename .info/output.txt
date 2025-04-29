@@ -1,0 +1,160 @@
+14:06:15.363 -> notifyDccMsg: 99 F9 60 
+
+14:06:15.363 -> notifyDccMsg: 99 F9 60 
+
+14:06:15.363 -> notifyDccMsg: 99 F9 60 
+
+14:06:15.363 -> notifyDccMsg: 99 F9 60 
+
+14:06:15.396 -> notifyDccMsg: 99 F1 68 
+
+14:06:15.396 -> notifyDccMsg: 99 F1 68 
+
+14:06:15.396 -> notifyDccMsg: 99 F1 68 
+
+14:06:15.396 -> notifyDccMsg: 99 F1 68 
+
+14:06:20.406 -> notifyDccMsg: 99 FA 63 
+
+14:06:20.406 -> notifyDccMsg: 99 FA 63 
+
+14:06:20.406 -> notifyDccMsg: 99 FA 63 
+
+14:06:20.406 -> notifyDccMsg: 99 FA 63 
+
+14:06:20.406 -> notifyDccMsg: 99 F2 6B 
+
+14:06:20.439 -> notifyDccMsg: 99 F2 6B 
+
+14:06:20.439 -> notifyDccMsg: 99 F2 6B 
+
+14:06:20.439 -> notifyDccMsg: 99 F2 6B 
+
+14:06:25.445 -> notifyDccMsg: 99 FB 62 
+
+14:06:25.445 -> notifyDccMsg: 99 FB 62 
+
+14:06:25.445 -> notifyDccMsg: 99 FB 62 
+
+14:06:25.445 -> notifyDccMsg: 99 FB 62 
+
+14:06:25.479 -> notifyDccMsg: 99 F3 6A 
+
+14:06:25.479 -> notifyDccMsg: 99 F3 6A 
+
+14:06:25.479 -> notifyDccMsg: 99 F3 6A 
+
+14:06:25.479 -> notifyDccMsg: 99 F3 6A 
+
+14:06:30.487 -> notifyDccMsg: 99 FC 65 
+
+14:06:30.487 -> notifyDccMsg: 99 FC 65 
+
+14:06:30.487 -> notifyDccMsg: 99 FC 65 
+
+14:06:30.487 -> notifyDccMsg: 99 FC 65 
+
+14:06:30.487 -> notifyDccMsg: 99 F4 6D 
+
+14:06:30.520 -> notifyDccMsg: 99 F4 6D 
+
+14:06:30.520 -> notifyDccMsg: 99 F4 6D 
+
+14:06:30.520 -> notifyDccMsg: 99 F4 6D 
+
+14:06:35.529 -> notifyDccMsg: 99 FD 64 
+
+14:06:35.529 -> notifyDccMsg: 99 FD 64 
+
+14:06:35.529 -> notifyDccMsg: 99 FD 64 
+
+14:06:35.529 -> notifyDccMsg: 99 FD 64 
+
+14:06:35.529 -> notifyDccMsg: 99 F5 6C 
+
+14:06:35.562 -> notifyDccMsg: 99 F5 6C 
+
+14:06:35.562 -> notifyDccMsg: 99 F5 6C 
+
+14:06:35.562 -> notifyDccMsg: 99 F5 6C 
+
+14:06:40.568 -> notifyDccMsg: 99 FE 67 
+
+14:06:40.568 -> notifyDccMsg: 99 FE 67 
+
+14:06:40.568 -> notifyDccMsg: 99 FE 67 
+
+14:06:40.568 -> notifyDccMsg: 99 FE 67 
+
+14:06:40.568 -> notifyDccMsg: 99 F6 6F 
+
+14:06:40.601 -> notifyDccMsg: 99 F6 6F 
+
+14:06:40.601 -> notifyDccMsg: 99 F6 6F 
+
+14:06:40.601 -> notifyDccMsg: 99 F6 6F 
+
+14:06:45.611 -> notifyDccMsg: 99 FF 66 
+
+14:06:45.611 -> notifyDccMsg: 99 FF 66 
+
+14:06:45.611 -> notifyDccMsg: 99 FF 66 
+
+14:06:45.611 -> notifyDccMsg: 99 FF 66 
+
+14:06:45.645 -> notifyDccMsg: 99 F7 6E 
+
+14:06:45.645 -> notifyDccMsg: 99 F7 6E 
+
+14:06:45.645 -> notifyDccMsg: 99 F7 6E 
+
+14:06:45.645 -> notifyDccMsg: 99 F7 6E 
+
+14:06:50.652 -> notifyDccMsg: 9A F8 62 
+
+14:06:50.652 -> notifyDccMsg: 9A F8 62 
+
+14:06:50.652 -> notifyDccMsg: 9A F8 62 
+
+14:06:50.685 -> notifyDccMsg: 9A F8 62 
+
+14:06:50.685 -> notifyDccMsg: 9A F0 6A 
+
+14:06:50.685 -> notifyDccMsg: 9A F0 6A 
+
+14:06:50.685 -> notifyDccMsg: 9A F0 6A 
+
+14:06:50.685 -> notifyDccMsg: 9A F0 6A 
+
+14:06:55.696 -> notifyDccMsg: 9A F9 63 
+
+14:06:55.696 -> notifyDccMsg: 9A F9 63 
+
+14:06:55.696 -> notifyDccMsg: 9A F9 63 
+
+14:06:55.696 -> notifyDccMsg: 9A F9 63 
+
+14:06:55.729 -> notifyDccMsg: 9A F1 6B 
+
+14:06:55.729 -> notifyDccMsg: 9A F1 6B 
+
+14:06:55.729 -> notifyDccMsg: 9A F1 6B 
+
+14:06:55.729 -> notifyDccMsg: 9A F1 6B 
+
+14:07:00.734 -> notifyDccMsg: 9A FA 60 
+
+14:07:00.734 -> notifyDccMsg: 9A FA 60 
+
+14:07:00.734 -> notifyDccMsg: 9A FA 60 
+
+14:07:00.767 -> notifyDccMsg: 9A FA 60 
+
+14:07:00.767 -> notifyDccMsg: 9A F2 68 
+
+14:07:00.767 -> notifyDccMsg: 9A F2 68 
+
+14:07:00.767 -> notifyDccMsg: 9A F2 68 
+
+14:07:00.767 -> notifyDccMsg: 9A F2 68 
+

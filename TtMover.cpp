@@ -5,17 +5,36 @@
  * 
  */
 
-#include "TtMover.h"
 #include "defines.h"
+
+#include "TtMover.h"
 
 #define TT_MOVER_SLOT_EMPTY 255
 
 //void TtMover::init(uint16_t onMs, uint16_t cduRechargeMs, uint8_t activeOutputState)
 void TtMover::init(uint16_t interval)
-{
+ {
 //  this->onMs = onMs;
 //  this->cduRechargeMs = cduRechargeMs;
 //  this->activeOutputState = activeOutputState;
+
+  for (int j = 0; j < 24; j++)
+   {
+    if ((sensors[j].pin != 0) &&  (sensors[j].analog != 1))
+     {
+
+      pinMode( sensors[j].pin, INPUT_PULLUP);
+
+#ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print(" TtMover::init: "); Serial3.println(sensors[j].pin,DEC);
+#else
+      Serial.print(" TtMover::init: "); Serial.println(sensors[j].pin,DEC);
+#endif
+#endif
+     }
+   }
+
 
   this->interval = interval;
   this->state = TT_IDLE;
@@ -26,7 +45,11 @@ void TtMover::init(uint16_t interval)
 uint8_t TtMover::addCommand(uint8_t command)
 {
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+  Serial3.print(" TtMover::addCommand: "); Serial3.println(command,DEC);
+#else
   Serial.print(" TtMover::addCommand: "); Serial.println(command,DEC);
+#endif
 #endif
 
   for(uint8_t i = 0; i < TT_MOVER_MAX_TRACKS; i++)
@@ -67,9 +90,12 @@ TT_State TtMover::process(void)
       this->thisCommand = this->commandQueue[0];
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print("TT_IDLE thiscommand: ");Serial3.println(this->thisCommand);
+#else
       Serial.print("TT_IDLE thiscommand: ");Serial.println(this->thisCommand);
 #endif
-
+#endif
 
       this->state = TT_MOVE;
     }
@@ -83,12 +109,17 @@ TT_State TtMover::process(void)
     case TT_MOVE:                             // start the move
 
 #ifdef DEBUG_MSG
-
+#ifdef ARDUINO_AVR_ATmega4809
+    Serial3.print("TT_MOVE 1 thisCommand = ");Serial3.println(this->thisCommand);
+    Serial3.print("TT_MOVE command = ");
+    this->InterpretCommand(this->thisCommand);
+    Serial3.println(this->CommandName);
+#else
     Serial.print("TT_MOVE thisCommand = ");Serial.println(this->thisCommand);
     Serial.print("TT_MOVE command = ");
     this->InterpretCommand(this->thisCommand);
     Serial.println(this->CommandName);
-
+#endif
 #endif
         // just the basic solenoid and motor commands
       if (this->thisCommand == CMD_MOTOR_CW)
@@ -165,13 +196,20 @@ TT_State TtMover::process(void)
         {
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+          Serial3.print("thisCommand = ");Serial3.println(this->thisCommand);
+#else
           Serial.print("thisCommand = ");Serial.println(this->thisCommand);
 #endif
-
+#endif
           this->direction = this->thisCommand - (int ( this->thisCommand / 10 ) * 10);
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+          Serial3.print("direction = ");Serial3.println(this->direction);
+#else
           Serial.print("direction = ");Serial.println(this->direction);
+#endif
 #endif
 
           if (this->direction == 1)
@@ -186,7 +224,11 @@ TT_State TtMover::process(void)
           }
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+          Serial3.print("target = ");Serial3.println(this->target);
+#else
           Serial.print("target = ");Serial.println(this->target);
+#endif
 #endif
 
       // work out target
@@ -240,9 +282,37 @@ TT_State TtMover::process(void)
               case 150:
                 this->target = 16;
                 break;
+              case 160:
+                this->target = 17;
+                break;
+              case 170:
+                this->target = 18;
+                break;
+              case 180:
+                this->target = 19;
+                break;
+              case 190:
+                this->target = 20;
+                break;
+              case 200:
+                this->target = 21;
+                break;
+              case 210:
+                this->target = 22;
+                break;
+              case 220:
+                this->target = 23;
+                break;
+              case 230:
+                this->target = 24;
+                break;
             }
 #ifdef DEBUG_MSG
-          Serial.print("goto T: "); Serial.println(target);
+#ifdef ARDUINO_AVR_ATmega4809
+          Serial3.print("goto T: "); Serial3.println(this->target);
+#else
+          Serial.print("goto T: "); Serial.println(this->target);
+#endif
 #endif
        }
 
@@ -255,7 +325,9 @@ TT_State TtMover::process(void)
       // work out target
          switch (this->track)
          {
-           case 1:
+
+#ifdef ARDUINO_AVR_NANO
+          case 1:
              this->target = 8;
              break;
            case 2:
@@ -303,10 +375,92 @@ TT_State TtMover::process(void)
            case 16:
              this->target = 9;
              break;
-         }
+#endif
+
+#ifdef ARDUINO_AVR_ATmega4809
+           case 1:
+             this->target = 24;
+             break;
+           case 2:
+             this->target = 23;
+             break;
+           case 3:
+             this->target = 22;
+             break;
+           case 4:
+             this->target = 21;
+             break;
+           case 5:
+             this->target = 20;
+             break;
+           case 6:
+             this->target = 19;
+             break;
+           case 7:
+             this->target = 18;
+             break;
+           case 8:
+             this->target = 17;
+             break;
+            case 9:
+             this->target = 16;
+             break;
+           case 10:
+             this->target = 15;
+             break;
+           case 11:
+             this->target = 14;
+             break;
+           case 12:
+             this->target = 13;
+             break;
+           case 13:
+             this->target = 12;
+             break;
+           case 14:
+             this->target = 11;
+             break;
+           case 15:
+             this->target = 10;
+             break;
+           case 16:
+             this->target = 9;
+             break;
+           case 17:
+             this->target = 8;
+             break;
+           case 18:
+             this->target = 7;
+             break;
+           case 19:
+             this->target = 6;
+             break;
+           case 20:
+             this->target = 5;
+             break;
+           case 21:
+             this->target = 4;
+             break;
+           case 22:
+             this->target = 3;
+             break;
+           case 23:
+             this->target = 2;
+             break;
+           case 24:
+             this->target = 1;
+             break;
+#endif
+
+#ifdef ARDUINO_ARCH_ESP32
+#endif
+      }
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+#else
       Serial.print(" T: "); Serial.println(this->target);
+#endif
 #endif
 
       }
@@ -314,8 +468,13 @@ TT_State TtMover::process(void)
     this->CheckSensors();
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+    Serial3.print(" this->target: "); Serial3.println(this->target);
+    Serial3.print(" this->track: "); Serial3.println(this->track);
+#else
     Serial.print(" this->target: "); Serial.println(this->target);
     Serial.print(" this->track: "); Serial.println(this->track);
+#endif
 #endif
 
     if (this->target == this->track)
@@ -324,15 +483,22 @@ TT_State TtMover::process(void)
      }
     else
      {
+      digitalWrite(SOLENOID_PIN, HIGH);
+      this->solenoidState = HIGH;
       this->state = TT_MOVING;
       this->startMs = millis();
      }
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+    Serial3.print(" this->state: "); Serial3.println(this->state);
+    Serial3.print(" this->startMs: "); Serial3.println(this->startMs);
+#else
     Serial.print(" this->state: "); Serial.println(this->state);
     Serial.print(" this->startMs: "); Serial.println(this->startMs);
 #endif
-    
+#endif
+
     break;
 
 
@@ -346,8 +512,11 @@ TT_State TtMover::process(void)
 
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+#else
 //      Serial.println("TT_MOVING: ");
 //      Serial.print("interval: ");Serial.println(this->interval);
+#endif
 #endif
 
 
@@ -358,9 +527,16 @@ TT_State TtMover::process(void)
         {
           this->CheckSensors();
 
+          this->solenoidState = !this->solenoidState;
+          digitalWrite(SOLENOID_PIN, this->solenoidState); //solenoid on
+
+
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+#else
       Serial.print(" this->target: "); Serial.println(this->target);
       Serial.print(" this->track: "); Serial.println(this->track);
+#endif
 #endif
           
           if ( this->target == this->track )
@@ -371,51 +547,6 @@ TT_State TtMover::process(void)
         }
        }
 
-
-/*
-      if ( ( this->thisCommand > CMD_SOLENOID_OFF) && ( this->thisCommand < CMD_ROTATE_CW ) )
-      {
-        digitalWrite(SOLENOID_PIN, HIGH); //solenoid on
-
-#ifdef DEBUG_MSG
-      Serial.print(" millis: "); Serial.println(millis());
-      Serial.print(" this->startMs: "); Serial.println(this->startMs);
-#endif
-
-        if ( ( millis() - this->startMs ) > this->interval)
-        {
-          this->CheckSensors();
-
-#ifdef DEBUG_MSG
-      Serial.print(" this->track: "); Serial.println(this->track);
-#endif
-          
-          if ( this->target == this->track )
-          {
-            this->state = TT_STOP;
-          }
-          this->startMs = millis();
-        }
-      }
-      else
-      {
-        this->state = TT_STOP;
-      }
-
-
-
-      if ( (this->thisCommand == CMD_ROTATE_CW) || (this->thisCommand == CMD_ROTATE_ACW) )
-      {
-        
-      }
-
-      if ( (this->thisCommand == CMD_STOP_AT_NEXT) )
-      {
-        this->state = TT_STOP;
-      }
-*/
-
-
     break;
 
 /*
@@ -425,9 +556,13 @@ TT_State TtMover::process(void)
     case TT_STOP:                             // at the target track turn of the solenoid and return to TT_IDLE move next command in queue to begining of queue
 
 #ifdef DEBUG_MSG
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.println("TT_STOP: ");
+#else
       Serial.println("TT_STOP: ");
 #endif
-      
+#endif
+
       if ( (this->thisCommand != CMD_ROTATE_CW) && (this->thisCommand != CMD_ROTATE_ACW) )
       {
        memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
@@ -565,6 +700,57 @@ void TtMover::InterpretCommand(byte newcommand)
       this->CommandName = "goto 16 <";
       break;
 
+#ifdef ARDUINO_AVR_ATmega4809
+    case CMD_GOTO_17_CW:
+      this->CommandName = "goto 17 >";
+      break;
+    case CMD_GOTO_17_ACW:
+      this->CommandName = "goto 17 <";
+      break;
+    case CMD_GOTO_18_CW:
+      this->CommandName = "goto 18 >";
+      break;
+    case CMD_GOTO_18_ACW:
+      this->CommandName = "goto 18 <";
+      break;
+    case CMD_GOTO_19_CW:
+      this->CommandName = "goto 19 >";
+      break;
+    case CMD_GOTO_19_ACW:
+      this->CommandName = "goto 19 <";
+      break;
+    case CMD_GOTO_20_CW:
+      this->CommandName = "goto 20 >";
+      break;
+    case CMD_GOTO_20_ACW:
+      this->CommandName = "goto 20 <";
+      break;
+    case CMD_GOTO_21_CW:
+      this->CommandName = "goto 21 >";
+      break;
+    case CMD_GOTO_21_ACW:
+      this->CommandName = "goto 21 <";
+      break;
+    case CMD_GOTO_22_CW:
+      this->CommandName = "goto 22 >";
+      break;
+    case CMD_GOTO_22_ACW:
+      this->CommandName = "goto 22 <";
+      break;
+    case CMD_GOTO_23_CW:
+      this->CommandName = "goto 23 >";
+      break;
+    case CMD_GOTO_23_ACW:
+      this->CommandName = "goto 23 <";
+      break;
+    case CMD_GOTO_24_CW:
+      this->CommandName = "goto 24 >";
+      break;
+    case CMD_GOTO_24_ACW:
+      this->CommandName = "goto 24 <";
+      break;
+#endif
+
     case CMD_STEP_CW:
       this->CommandName = "step >";
       break;
@@ -594,13 +780,49 @@ void TtMover::InterpretCommand(byte newcommand)
 
 
 void TtMover::CheckSensors()
-{
+ {
   // need to look at noise suppression
   int x = 0;
   int z = 0; //for getting average
 
   this->lastTrack = this->track;
 
+#ifdef ARDUINO_AVR_NANO
+
+ for (int j = 0; j < 24; j++)
+  {
+   if (sensors[j].pin != 0)
+    { //crude attempt at suppression LOW = ON
+     z = 0;
+ #ifdef DEBUG_MSG
+     Serial.print("j: ");Serial.println(j);
+ #endif
+     for (int n=1; n<10; n++)
+      {
+       if ( !sensors[j].analog )
+        {
+         z = z + (digitalRead(sensors[j].pin));
+        }
+       else
+        {
+         z = z + (dr(sensors[j].pin));
+        }
+ #ifdef DEBUG_MSG
+      Serial.print(" ");Serial.print(z);
+ #endif
+      }
+     if ( z < 4)
+      {
+       x = j + 1;
+ #ifdef DEBUG_MSG
+     Serial.print("z<4 x: ");Serial.println(x);
+ #endif
+     }
+    }    
+  }
+
+
+/*
   for (int j = HALL_1; j <= HALL_9; j++)
    {
     //crude attempt at suppression LOW = ON
@@ -648,10 +870,13 @@ void TtMover::CheckSensors()
 #ifdef DEBUG_MSG
    Serial.print("checkSensor 2 x: ");Serial.println(x);
 #endif
+
+*/
+
   if ( x > 0)
-  {
+   {
     switch (x)
-    {
+     {
       case HALL_1:
         this->track = 1;      // Also track 8 reverse
         break;
@@ -704,7 +929,7 @@ void TtMover::CheckSensors()
 
 #ifdef DEBUG_MSG
   Serial.print("checkSensors Track = "); Serial.println(track);
-#endif 
+#endif
 
   }
   else
@@ -713,9 +938,55 @@ void TtMover::CheckSensors()
 #ifdef DEBUG_MSG_2
   Serial.println("checksensors moving ");
   Serial.print("last track = "); Serial.println(lastTrack);
-#endif 
+#endif
 
   }
+
+#endif
+
+#ifdef ARDUINO_AVR_ATmega4809
+
+for (int j = 0; j < 23; j++)
+ {
+ //crude attempt at suppression LOW = ON
+  z = 0;
+#ifdef DEBUG_MSG
+  if (digitalRead(sensors[j].pin) == 0)
+   {
+    Serial3.print("j: ");Serial3.println(j);
+    Serial3.print("pin: ");Serial3.println(sensors[j].pin);
+   }
+#endif
+   for (int n=1; n<5; n++)
+    {
+        z = z + (digitalRead(sensors[j].pin));
+
+#ifdef DEBUG_MSG
+     Serial3.print(" ");Serial3.print(z);
+#endif
+    }
+    if ( z < 4)
+    {
+     x = j + 1;
+#ifdef DEBUG_MSG
+     Serial3.print("z<4 x: ");Serial3.println(x);
+#endif
+    }
+   }
+
+#ifdef DEBUG_MSG
+  Serial3.print("checkSensor 1 x: ");Serial3.println(x);
+#endif
+
+  if ( x > 0)
+   {
+
+    this->track = x;
+
+   }
+
+
+#endif
 
 }
 

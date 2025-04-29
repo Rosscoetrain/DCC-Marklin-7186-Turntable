@@ -1,6 +1,11 @@
 /*
- * variables.h
+ * @file variables.h
  */
+
+#ifndef VARIABLES_H
+#define VARIABLES_H
+
+
 
 
 NmraDcc  Dcc ;
@@ -41,4 +46,6 @@ uint8_t versionBuffer[3];
 
 
 
-  
+
+
+#endif
