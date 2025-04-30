@@ -50,8 +50,6 @@ pinMode(LED_BUILTIN, OUTPUT);
   pinMode( DccAckPin, OUTPUT );
 #endif
 
-//  initSensors();
-
   ttMover.init(Dcc.getCV(CV_ACCESSORY_DECODER_WAIT_TIME) * 10);
 
   // Setup which External Interrupt, the Pin it's associated with that we're using and enable the Pull-Up

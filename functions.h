@@ -24,8 +24,8 @@ void setCommand(uint16_t Addr, uint8_t Direction, uint8_t OutputPower)
     Serial3.print(F("Value = ")); Serial.println(Addr,DEC);
     Serial3.print(F("Dir = ")); Serial.println(Direction,DEC);
     Serial3.print(F("Op = ")); Serial.println(OutputPower,DEC);
-//    Serial.print(F(" H = ")); Serial.println(H,DEC);
-//    Serial.print(F(" L = ")); Serial.println(L,DEC);
+//    Serial3.print(F(" H = ")); Serial.println(H,DEC);
+//    Serial3.print(F(" L = ")); Serial.println(L,DEC);
 #else
     Serial.println("setCommand");
     Serial.print(F("Value = ")); Serial.println(Addr,DEC);
@@ -154,35 +154,6 @@ void(* resetFunc) (void) = 0;//declare reset function at address 0
 
 
 /*
- * initialize the sensors
- */
-
-/*
-void initSensors()
- {
-  // 16 input pins for hall sensors
-
-#ifdef ARDUINO_AVR_NANO
-  for (int j = HALL_1; j < HALL_10; j++)  // digital pin D3 - D11 on Arduino Nano
-   {
-    pinMode( j, INPUT_PULLUP);
-   }
-
-  for (int j = HALL_10; j < HALL_16; j++) // analog pin A0 - A5 on Arduino Nano, A6 is not available as a digital input use dr(pin) function to read
-   {
-    pinMode( j, INPUT_PULLUP);
-   }
-#elif ARDUINO_ARCH_ESP32
-
-#elif ARDUINO_AVR_ATmega4809
-
-#endif
-
- }
-*/
-
-
-/*
  * process serial commands
  */
 
@@ -190,7 +161,6 @@ void initSensors()
 
 void doSerialCommand(String readString)
  {
-//  byte p = 0;
 
   readString.trim();
 
@@ -231,16 +201,7 @@ void doSerialCommand(String readString)
     Serial3.println(F("Throw a turnout: <T address>"));
     Serial3.println(F("Set decoder base address: <A address>"));
     Serial3.println(F("Set decoder output pulse time: <P  mS / 10>"));
-/*
-Serial.println(F("Set decoder CDU recharge time: <R  mS / 10>"));
-Serial.println(F("Set deocder active state: <S  0/1>"));
-*/
-
-//    Serial.print(F("Change decoder address LSB: <W ")); Serial.print(CV_ACCESSORY_DECODER_ADDRESS_LSB); Serial.println(F(" address>"));
-//    Serial.print(F("Change decoder address MSB: <W ")); Serial.print(CV_ACCESSORY_DECODER_ADDRESS_MSB); Serial.println(F(" address>"));
-//    Serial.print(F("Set decoder output pulse time: <W ")); Serial.print(CV_ACCESSORY_DECODER_OUTPUT_PULSE_TIME); Serial.println(F(" mS / 10>"));
-//    Serial.print(F("Set decoder CDU recharge time: <W ")); Serial.print(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME); Serial.println(F(" mS / 10>"));
-//    Serial.print(F("Set deocder active state: <W ")); Serial.print(CV_ACCESSORY_DECODER_ACTIVE_STATE); Serial.println(F(" 0/1>"));
+    Serial3.println(F("Reset decoder to Factory Defaults: <D>"));
 
     Serial3.println(F("Show current CVs: <>"));
     Serial3.println(F("Soft Reset: <Z>"));
@@ -250,16 +211,7 @@ Serial.println(F("Set deocder active state: <S  0/1>"));
     Serial.println(F("Throw a turnout: <T address>"));
     Serial.println(F("Set decoder base address: <A address>"));
     Serial.println(F("Set decoder output pulse time: <P  mS / 10>"));
-/*
-    Serial.println(F("Set decoder CDU recharge time: <R  mS / 10>"));
-    Serial.println(F("Set deocder active state: <S  0/1>"));
-*/
-
-//    Serial.print(F("Change decoder address LSB: <W ")); Serial.print(CV_ACCESSORY_DECODER_ADDRESS_LSB); Serial.println(F(" address>"));
-//    Serial.print(F("Change decoder address MSB: <W ")); Serial.print(CV_ACCESSORY_DECODER_ADDRESS_MSB); Serial.println(F(" address>"));
-//    Serial.print(F("Set decoder output pulse time: <W ")); Serial.print(CV_ACCESSORY_DECODER_OUTPUT_PULSE_TIME); Serial.println(F(" mS / 10>"));
-//    Serial.print(F("Set decoder CDU recharge time: <W ")); Serial.print(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME); Serial.println(F(" mS / 10>"));
-//    Serial.print(F("Set deocder active state: <W ")); Serial.print(CV_ACCESSORY_DECODER_ACTIVE_STATE); Serial.println(F(" 0/1>"));
+    Serial.println(F("Reset decoder to Factory Defaults: <D>"));
 
     Serial.println(F("Show current CVs: <>"));
     Serial.println(F("Soft Reset: <Z>"));
@@ -311,17 +263,6 @@ Serial.println(F("Set deocder active state: <S  0/1>"));
       Serial.print(CV_29_CONFIG);
       Serial.print(F(" = "));
       Serial.println(Dcc.getCV(CV_29_CONFIG));
-/*
-      Serial.print(F("CV"));
-      Serial.print(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME);
-      Serial.print(F(" = "));
-      Serial.println(Dcc.getCV(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME));
-
-      Serial.print(F("CV"));
-      Serial.print(CV_ACCESSORY_DECODER_ACTIVE_STATE);
-      Serial.print(F(" = "));
-      Serial.println(Dcc.getCV(CV_ACCESSORY_DECODER_ACTIVE_STATE));
-*/
 #endif
 
      }
@@ -329,7 +270,6 @@ Serial.println(F("Set deocder active state: <S  0/1>"));
      {
       if (readString.startsWith("<"))
        {
-//        int pos = 0;
         // this is where commands are completed
 
         // command to close turnout <C address>
@@ -464,132 +404,6 @@ Serial.println(F("Set deocder active state: <S  0/1>"));
           resetFunc();
          }
 
-/*
-        if (readString.startsWith("<R"))
-         {
-          StringSplitter *splitter = new StringSplitter(readString, ' ', 3);  // new StringSplitter(string_to_split, delimiter, limit)
-          int itemCount = splitter->getItemCount();
-
-          if ( itemCount == 2)
-           {
-            int addr = splitter->getItemAtIndex(1).toInt();
-
-#ifdef DEBUG_MSG
-            Serial.print(F("Value = ")); Serial.println(addr);
-#endif
-
-
-//            Dcc.setCV(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME, addr);
-
-           }
-          else
-           {
-            Serial.println(F("Invalid command: should be <U ms/10>"));
-           }
-          delete splitter;
-          splitter = NULL;
-         }
-*/
-
-/*
-        if (readString.startsWith("<S"))
-         {
-          StringSplitter *splitter = new StringSplitter(readString, ' ', 3);  // new StringSplitter(string_to_split, delimiter, limit)
-          int itemCount = splitter->getItemCount();
-
-          if (itemCount == 2)
-           {
-            int addr = splitter->getItemAtIndex(1).toInt();
-
-#ifdef DEBUG_MSG
-            Serial.print(F("Value = ")); Serial.println(addr);
-#endif
-
-            
-//             Dcc.setCV(CV_ACCESSORY_DECODER_ACTIVE_STATE, addr);
-
-           }
-          else
-           {
-            Serial.println(F("Invalid command: should be <S 0> or <S 1>"));
-           }
-          delete splitter;
-          splitter = NULL;
-         }
-*/
-
-
-/*              
-        if (readString.startsWith("<W"))
-         {
-          StringSplitter *splitter = new StringSplitter(readString, ' ', 3);  // new StringSplitter(string_to_split, delimiter, limit)
-          int itemCount = splitter->getItemCount();
-
-          if ( itemCount == 3)
-           {
-            byte addr = splitter->getItemAtIndex(1).toInt();
-            int value = splitter->getItemAtIndex(2).toInt();
-
-            switch (addr) {
-              case CV_ACCESSORY_DECODER_ADDRESS_LSB:                  // CV1
-
-                    byte L = (value + 3) / 4;
-                    byte H = (value + 3) / 1024;
-
-#ifdef DEBUG_MSG
-                  Serial.print(F("Value = ")); Serial.println(value);
-                  Serial.print(F(" H = ")); Serial.println(H);
-                  Serial.print(F(" L = ")); Serial.println(L);
-#endif
-                  
-                  Dcc.setCV(CV_ACCESSORY_DECODER_ADDRESS_MSB, H);
-                  Dcc.setCV(CV_ACCESSORY_DECODER_ADDRESS_LSB, L);
-              break;
-              case CV_ACCESSORY_DECODER_ADDRESS_MSB:                  // CV9
-                  Dcc.setCV(CV_ACCESSORY_DECODER_ADDRESS_MSB, value);
-              break;
-
-              case 8:
-                if (value == 8)
-                 {
-                 }
-              break;
-              case CV_ACCESSORY_DECODER_OUTPUT_PULSE_TIME:
-                if ((value >= 0) && (value <= 255))
-                 {
-                  Dcc.setCV(CV_ACCESSORY_DECODER_OUTPUT_PULSE_TIME, value);
-                 }
-              break;
-              case CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME:
-                if ((value >= 0) && (value <= 255))
-                 {
-                  Dcc.setCV(CV_ACCESSORY_DECODER_CDU_RECHARGE_TIME, value);
-                 }
-              break;
-              case CV_ACCESSORY_DECODER_ACTIVE_STATE:
-                if ((value == 0) || (value == 1))
-                 {
-                  Dcc.setCV(CV_ACCESSORY_DECODER_ACTIVE_STATE, value);
-                 }
-                else
-                 {
-                  Serial.println(F("Value must be 0 (LOW) or 1 (HIGH)"));
-                 }
-              break;
-              default:
-                 Serial.println(F("Invalid cv number: should be <W cv value> "));
-              break;
-             }
-           }
-          else
-           {
-            Serial.println(F("Invalid command: should be <W cv value>"));
-           }
-          delete splitter;
-          splitter = NULL;
-         }
-*/
-
        }
       else
        {
@@ -619,7 +433,6 @@ void notifyCVResetFactoryDefault()
 
 
 #ifdef ENABLE_DCC_ACK
-//const int DccAckPin = 3 ;
 
 // This function is called by the NmraDcc library when a DCC ACK needs to be sent
 // Calling this function should cause an increased 60ma current drain on the power supply for 6ms to ACK a CV Read 

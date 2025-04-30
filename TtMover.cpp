@@ -14,10 +14,6 @@
 //void TtMover::init(uint16_t onMs, uint16_t cduRechargeMs, uint8_t activeOutputState)
 void TtMover::init(uint16_t interval)
  {
-//  this->onMs = onMs;
-//  this->cduRechargeMs = cduRechargeMs;
-//  this->activeOutputState = activeOutputState;
-
   for (int j = 0; j < 24; j++)
    {
     if ((sensors[j].pin != 0) &&  (sensors[j].analog != 1))
@@ -192,7 +188,7 @@ TT_State TtMover::process(void)
 
 
   //GoTo commands
-      if (( CMD_GOTO_1_CW <= this->thisCommand ) && ( this->thisCommand <= CMD_GOTO_16_ACW ))
+      if (( CMD_GOTO_1_CW <= this->thisCommand ) && ( this->thisCommand <= CMD_GOTO_24_ACW ))
         {
 
 #ifdef DEBUG_MSG
@@ -458,6 +454,7 @@ TT_State TtMover::process(void)
 
 #ifdef DEBUG_MSG
 #ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print(" T: "); Serial3.println(this->target);
 #else
       Serial.print(" T: "); Serial.println(this->target);
 #endif
@@ -513,12 +510,13 @@ TT_State TtMover::process(void)
 
 #ifdef DEBUG_MSG
 #ifdef ARDUINO_AVR_ATmega4809
+      Serial3.println("TT_MOVING: ");
+      Serial3.print("interval: ");Serial3.println(this->interval);
 #else
-//      Serial.println("TT_MOVING: ");
-//      Serial.print("interval: ");Serial.println(this->interval);
+      Serial.println("TT_MOVING: ");
+      Serial.print("interval: ");Serial.println(this->interval);
 #endif
 #endif
-
 
       if ( ( this->thisCommand >= CMD_GOTO_1_CW ) && ( this->thisCommand <= CMD_GOTO_16_CW ) )
 
@@ -533,6 +531,8 @@ TT_State TtMover::process(void)
 
 #ifdef DEBUG_MSG
 #ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print(" this->target: "); Serial3.println(this->target);
+      Serial3.print(" this->track: "); Serial3.println(this->track);
 #else
       Serial.print(" this->target: "); Serial.println(this->target);
       Serial.print(" this->track: "); Serial.println(this->track);
@@ -820,58 +820,6 @@ void TtMover::CheckSensors()
      }
     }    
   }
-
-
-/*
-  for (int j = HALL_1; j <= HALL_9; j++)
-   {
-    //crude attempt at suppression LOW = ON
-    z = 0;
-#ifdef DEBUG_MSG
-    Serial.print("j: ");Serial.println(j);
-#endif
-    for (int n=1; n<10; n++)
-     {
-      z = z + (digitalRead(j));
-#ifdef DEBUG_MSG
-      Serial.print(" ");Serial.print(z);
-#endif
-     }
-#ifdef DEBUG_MSG
-   Serial.println("");
-#endif
-   if ( z < 4)
-    {
-      x = j;
-#ifdef DEBUG_MSG
-      Serial.print("z<4 x: ");Serial.println(x);
-#endif
-    }
-   }
-
-#ifdef DEBUG_MSG
-   Serial.print("checkSensor 1 x: ");Serial.println(x);
-#endif
-
-  if (x == 0)
-   {
-    for (int j = HALL_10; j <= HALL_16; j++)
-     {
-      //crude attempt at suppression LOW = ON
-      z = 0;
-      for (int n=1; n<10; n++)
-       {
-//        z = z + (digitalRead(j));
-        z = z + (dr(j));
-       }
-      if ( z < 4) x = j;
-     }
-   }
-#ifdef DEBUG_MSG
-   Serial.print("checkSensor 2 x: ");Serial.println(x);
-#endif
-
-*/
 
   if ( x > 0)
    {
