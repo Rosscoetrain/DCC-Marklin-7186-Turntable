@@ -9,7 +9,7 @@
 
 #include "TtMover.h"
 
-#define TT_MOVER_SLOT_EMPTY 255
+#define TT_MOVER_SLOT_EMPTY 511
 
 //void TtMover::init(uint16_t onMs, uint16_t cduRechargeMs, uint8_t activeOutputState)
 void TtMover::init(uint16_t interval)
@@ -35,12 +35,18 @@ void TtMover::init(uint16_t interval)
   this->interval = interval;
   this->state = TT_IDLE;
 //  targetMs = 0;
-  memset(this->commandQueue, TT_MOVER_SLOT_EMPTY, TT_MOVER_MAX_TRACKS + 1);
+//  memset(this->commandQueue, TT_MOVER_SLOT_EMPTY, TT_MOVER_MAX_TRACKS + 1);
+
+  for (int j = 0; j < TT_MOVER_MAX_TRACKS +  1; j++)
+   {
+    this->commandQueue[j] = TT_MOVER_SLOT_EMPTY;
+   }
+
 }
 
-uint8_t TtMover::addCommand(uint8_t command)
+uint8_t TtMover::addCommand(uint16_t command)
 {
-#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG_4
 #ifdef ARDUINO_AVR_ATmega4809
   Serial3.print(" TtMover::addCommand: "); Serial3.println(command,DEC);
 #else
@@ -52,13 +58,25 @@ uint8_t TtMover::addCommand(uint8_t command)
   {
     if(this->commandQueue[i] == command)
     {
-//      Serial.print(" Already in Index: "); Serial.println(i,DEC);
+#ifdef DEBUG_MSG_4
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print(" Already in Index: "); Serial3.println(i,DEC);
+#else
+      Serial.print(" Already in Index: "); Serial.println(i,DEC);
+#endif
+#endif
       return i;
     }
 
     else if(commandQueue[i] == TT_MOVER_SLOT_EMPTY)
     {
-//      Serial.print(" pinQueue Index: "); Serial.println(i,DEC);
+#ifdef DEBUG_MSG_4
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.print(" commandQueue Index: "); Serial3.println(i,DEC);
+#else
+      Serial.print(" commandQueue Index: "); Serial.println(i,DEC);
+#endif
+#endif
       this->commandQueue[i] = command;
       this->process();
       return i;
@@ -85,7 +103,7 @@ TT_State TtMover::process(void)
     {
       this->thisCommand = this->commandQueue[0];
 
-#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG_3
 #ifdef ARDUINO_AVR_ATmega4809
       Serial3.print("TT_IDLE thiscommand: ");Serial3.println(this->thisCommand);
 #else
@@ -163,7 +181,13 @@ TT_State TtMover::process(void)
         digitalWrite(MOTOR_PIN, DIR_CW);
         digitalWrite(SOLENOID_PIN, HIGH);
 
-        memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
+        for (int i = 0; i < TT_MOVER_MAX_TRACKS; i++)
+         {
+          this->commandQueue[i] = this->commandQueue[i + 1];
+         }
+         this->commandQueue[TT_MOVER_MAX_TRACKS + 1] = TT_MOVER_SLOT_EMPTY;
+
+//        memmove(this->commandQueue, this->commandQueue + 2, TT_MOVER_MAX_TRACKS);
         this->state = TT_MOVING;
 
       }
@@ -174,7 +198,13 @@ TT_State TtMover::process(void)
         digitalWrite(MOTOR_PIN, DIR_ACW);
         digitalWrite(SOLENOID_PIN, HIGH);
 
-        memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
+        for (int i = 0; i < TT_MOVER_MAX_TRACKS; i++)
+         {
+          this->commandQueue[i] = this->commandQueue[i + 1];
+         }
+         this->commandQueue[TT_MOVER_MAX_TRACKS + 1] = TT_MOVER_SLOT_EMPTY;
+
+//        memmove(this->commandQueue, this->commandQueue + 2, TT_MOVER_MAX_TRACKS);
         this->state = TT_MOVING;
 
       }
@@ -555,7 +585,7 @@ TT_State TtMover::process(void)
 
     case TT_STOP:                             // at the target track turn of the solenoid and return to TT_IDLE move next command in queue to begining of queue
 
-#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG_5
 #ifdef ARDUINO_AVR_ATmega4809
       Serial3.println("TT_STOP: ");
 #else
@@ -564,11 +594,16 @@ TT_State TtMover::process(void)
 #endif
 
       if ( (this->thisCommand != CMD_ROTATE_CW) && (this->thisCommand != CMD_ROTATE_ACW) )
-      {
-       memmove(this->commandQueue, this->commandQueue + 1, TT_MOVER_MAX_TRACKS);
-      }
+       {
+        for (int i = 0; i < TT_MOVER_MAX_TRACKS; i++)
+         {
+          this->commandQueue[i] = this->commandQueue[i + 1];
+         }
+         this->commandQueue[TT_MOVER_MAX_TRACKS + 1] = TT_MOVER_SLOT_EMPTY;
+       }
 
-      digitalWrite(SOLENOID_PIN, LOW); //solenoid off      
+      digitalWrite(SOLENOID_PIN, LOW);    //solenoid off      
+      digitalWrite(MOTOR_PIN, LOW);       //motor pin off      
 
       this->state = TT_IDLE;
     break;

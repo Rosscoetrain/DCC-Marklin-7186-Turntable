@@ -20,10 +20,10 @@ void setCommand(uint16_t Addr, uint8_t Direction, uint8_t OutputPower)
 
 #ifdef DEBUG_MSG
 #ifdef ARDUINO_AVR_ATmega4809
-    Serial3.println("setCommand");
-    Serial3.print(F("Value = ")); Serial.println(Addr,DEC);
-    Serial3.print(F("Dir = ")); Serial.println(Direction,DEC);
-    Serial3.print(F("Op = ")); Serial.println(OutputPower,DEC);
+    Serial3.println("setCommand Learning");
+    Serial3.print(F("Value = ")); Serial3.println(Addr,DEC);
+    Serial3.print(F("Dir = ")); Serial3.println(Direction,DEC);
+    Serial3.print(F("Op = ")); Serial3.println(OutputPower,DEC);
 //    Serial3.print(F(" H = ")); Serial.println(H,DEC);
 //    Serial3.print(F(" L = ")); Serial.println(L,DEC);
 #else
@@ -68,7 +68,7 @@ void setCommand(uint16_t Addr, uint8_t Direction, uint8_t OutputPower)
 
       ttMover.addCommand(thisCommand);
 
-#ifdef  DEBUG_MSG_1
+#ifdef DEBUG_MSG_1
 #ifdef ARDUINO_AVR_ATmega4809
       Serial3.println("");
       Serial3.print("ndato thisCommand: ");

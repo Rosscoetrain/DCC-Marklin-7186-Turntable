@@ -31,10 +31,15 @@ uint8_t FactoryDefaultCVIndex = 0;
 uint16_t BaseTurnoutAddress;
 
 // for address learning mode
+#ifdef ARDUINO_AVR_ATmega4809
+int LEARNINGBUTTON = 39;    // pin PF5
+#else
 int LEARNINGBUTTON = A7;    // pin A6
+#endif
+
 int learningMode = LOW;
 
-byte thisCommand = 0;
+uint16_t thisCommand = 0;
 
 // buffer to hold serial commands
 String readString;

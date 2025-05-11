@@ -24,8 +24,10 @@ class TtMover
 {
   private:
     TT_State state = TT_IDLE;
-    uint8_t commandQueue[TT_MOVER_MAX_TRACKS + 1];
-    byte thisCommand, newCommand;
+//    uint8_t commandQueue[TT_MOVER_MAX_TRACKS + 1];
+//    byte thisCommand, newCommand;
+    uint16_t commandQueue[TT_MOVER_MAX_TRACKS + 1];
+    uint16_t thisCommand, newCommand;
     byte target, track, lastTrack;
     byte direction;
     String CommandName;
@@ -44,7 +46,7 @@ class TtMover
 
   public:
     void init(uint16_t interval);
-    uint8_t addCommand(uint8_t command);
+    uint8_t addCommand(uint16_t command);
     TT_State process(void);
 
   private:
@@ -72,12 +74,14 @@ class TtMover
  #elif ARDUINO_AVR_ATmega4809
  
     sensor_t sensors[24] = {{3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {10, 0}, {11, 0}, {12, 0}, {13, 0}, {14, 0}, {15, 0}, {16, 0},
-                          // 0       1       2       3       4       5       6       7        8        9        10        11                // array index
-                          // 1       2       3       4       5       6       7       8        9        10       11        12                // sensor board position
-                           {17, 0}, {18, 0}, {19, 0}, {20, 0}, {21, 0}, {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0}, {27, 0}, {28, 0}};
-                         // 12       13       14       15       16       17       18       19       20       21       22       23          // array index
-                         // 13       14       15       16       17       18       19       20       21       22       23       24          // sensor board position
- 
+                          // 0       1       2       3       4       5        6        7        8        9        10       11                // array index
+                          // 1       2       3       4       5       6        7        8        9        10       11       12                // sensor board position
+                          // PA3     PA4     PA5     PA6     PA7     PB2      PB3      PB4      PB5      PC0      PC1      PC2
+                            {17, 0}, {18, 0}, {19, 0}, {20, 0}, {21, 0}, {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0}, {27, 0}, {28, 0}};
+                          // 12       13       14       15       16       17       18       19       20       21       22       23          // array index
+                          // 13       14       15       16       17       18       19       20       21       22       23       24          // sensor board position
+                          // PC3      PC4      PC5      PC6      PC7      PD0      PD1      PD2      PD3      PD4      PD5      PD6
+
  #endif
  
 

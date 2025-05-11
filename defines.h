@@ -23,6 +23,15 @@
 // to show level 2 debug messages
 //#define DEBUG_MSG_2
 
+// to show level 3 debug messages
+//#define DEBUG_MSG_3
+
+// to show level 4 debug messages
+//#define DEBUG_MSG_4
+
+// to show level 5 debug messages
+#define DEBUG_MSG_5
+
 
 // Uncomment to print all DCC Packets
 //#define  NOTIFY_DCC_MSG
@@ -35,7 +44,7 @@
 //#define FORCE_RESET_FACTORY_DEFAULT_CV
 
 #ifdef ARDUINO_AVR_ATmega4809
-#define LED_BUILTIN 39
+#define LED_BUILTIN 39           // this is on ATmega4809 Curiosity Nano.
 #endif
 
 // Un-Comment the line below to Enable DCC ACK for Service Mode Programming Read CV Capablilty 
@@ -43,7 +52,7 @@
 //#define ENABLE_DCC_ACK  15  // This is A1 on the Iowa Scaled Engineering ARD-DCCSHIELD DCC Shield
 //#define DccAckPin ENABLE_DCC_ACK
 //#ifdef ARDUINO_AVR_ATmega4809
-//#define ENABLE_DCC_ACK 26
+//#define ENABLE_DCC_ACK 36   // PF2
 //#endif
 
 #define LEDCONTROL LED_BUILTIN
@@ -142,10 +151,10 @@
 #define HALL_24 26     // D26
 
 
-#define LEARN_BUTTON 36 // D39
+#define LEARN_BUTTON 39 //   PF5
 
-#define SOLENOID_PIN 37
-#define MOTOR_PIN 38
+#define SOLENOID_PIN 37 //   PF3
+#define MOTOR_PIN 38    //   PF4
 
 
 #endif
@@ -154,21 +163,21 @@
 
 
 // command defines single commands
-// available values are 0 - 255
+// these are still referenced as turnouts eg <T 25> = CMD_MOTOR_CW <C 25> = CMD_MOTOR_ACW
 
-#define CMD_MOTOR_CW 241
-#define CMD_MOTOR_ACW 242
-#define CMD_SOLENOID_ON 243
-#define CMD_SOLENOID_OFF 244 
+#define CMD_MOTOR_CW 241        // T 25
+#define CMD_MOTOR_ACW 242       // C 25
+#define CMD_SOLENOID_ON 251     // T 26
+#define CMD_SOLENOID_OFF 252    // C 26
 
-#define CMD_STEP_CW 245
-#define CMD_STEP_ACW 246
-#define CMD_180_CW 247
-#define CMD_180_ACW 248
-#define CMD_ROTATE_CW 249
-#define CMD_ROTATE_ACW 250
-#define CMD_STOP_AT_NEXT 251
-#define CMD_SPARE 252
+#define CMD_STEP_CW 261         // T 27
+#define CMD_STEP_ACW 262        // C 27
+#define CMD_180_CW 271          // T 28
+#define CMD_180_ACW 272         // C 28
+#define CMD_ROTATE_CW 281       // T 29
+#define CMD_ROTATE_ACW 282      // C 29
+#define CMD_STOP_AT_NEXT 291    // T 30
+#define CMD_SPARE 292           // C 30
 
 
 // command defines track commands

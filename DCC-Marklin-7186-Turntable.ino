@@ -29,6 +29,16 @@ void setup()
 
 pinMode(LED_BUILTIN, OUTPUT);
 
+pinMode(SOLENOID_PIN, OUTPUT);
+pinMode(MOTOR_PIN, OUTPUT);
+
+pinMode(LEARN_BUTTON, INPUT);
+
+digitalWrite(SOLENOID_PIN, LOW);
+digitalWrite(MOTOR_PIN, LOW);
+
+
+
 #ifdef ARDUINO_AVR_ATmega4809
   Serial3.begin(115200);
 #else
@@ -128,7 +138,17 @@ void loop()
 
   if (learningbuttonOldval != learningbuttonVal) {
     learningMode = learningbuttonVal;
-    if (learningMode == HIGH) showAcknowledge(3);
+    if (learningMode == HIGH)
+     {
+#ifdef DEBUG_MSG_3
+#ifdef ARDUINO_AVR_ATmega4809
+      Serial3.println("Learning pin high");
+#else
+      Serial.println("Learning pin high");
+#endif
+#endif
+      showAcknowledge(3);
+     }
    }
   learningbuttonOldval = learningbuttonVal;
 
